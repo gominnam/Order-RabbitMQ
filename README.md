@@ -1,6 +1,9 @@
 # Getting Started
 
-### RabbitMQ를 활용한 메시지 큐 구현
+### Project Purpose
+
+* RabbitMQ를 활용한 메시지 큐 구현
+* TDD 방식으로 개발 연습
 
 
 ### 개발 테스트 환경
