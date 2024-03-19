@@ -26,6 +26,7 @@ public class OrderServiceImpl implements OrderService {
         try {
             String orderMessage = objectMapper.writeValueAsString(order);
             rabbitTemplate.convertAndSend(RabbitMQConfig.EXCHANGE_NAME, RabbitMQConfig.ROUTING_KEY, orderMessage);
+            System.out.println("Order message sent: " + orderMessage);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }

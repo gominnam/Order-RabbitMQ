@@ -2,7 +2,6 @@ package com.example.rabbitmqprac.controller;
 
 import com.example.rabbitmqprac.model.Order;
 import com.example.rabbitmqprac.service.OrderService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -40,7 +39,7 @@ public class OrderControllerTest {
 
         given(orderService.createOrder(order)).willReturn(order);
 
-        mockMvc.perform(post("/api/orders")
+        mockMvc.perform(post("/api/order")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(order)))
                 .andExpect(status().isOk());
