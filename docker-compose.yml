@@ -1,0 +1,21 @@
+version: '3.8'
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"  # RabbitMQ의 기본 AMQP 프로토콜 통신에 사용
+      - "15672:15672"  # RabbitMQ의 관리 플러그인(Management Plugin)에 사용
+    environment:
+      RABBITMQ_DEFAULT_USER: user
+      RABBITMQ_DEFAULT_PASS: password
+
+  consumer:
+    build: .
+    depends_on:
+      - rabbitmq
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_RABBITMQ_HOST: rabbitmq
+      SPRING_RABBITMQ_USERNAME: user
+      SPRING_RABBITMQ_PASSWORD: password
