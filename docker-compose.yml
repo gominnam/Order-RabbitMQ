@@ -1,5 +1,16 @@
 version: '3.8'
 services:
+  postgres:
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
   rabbitmq:
     image: rabbitmq:3-management
     ports:
@@ -12,6 +23,7 @@ services:
   consumer:
     build: .
     depends_on:
+      - postgres
       - rabbitmq
     ports:
       - "8080:8080"
@@ -19,3 +31,6 @@ services:
       SPRING_RABBITMQ_HOST: rabbitmq
       SPRING_RABBITMQ_USERNAME: user
       SPRING_RABBITMQ_PASSWORD: password
+
+volumes:
+  postgres_data: # 데이터 볼륨을 사용하면 컨테이너가 삭제되어도 데이터는 영구적으로 보존

@@ -32,7 +32,7 @@ public class OrderControllerTest {
     @Test
     public void createOrderTest() throws Exception {
         Order order = new Order();
-        order.setId("1");
+        order.setId(1L);
         order.setCustomerId("customer-1");
         order.setProduct("macbook-pro");
         order.setAmount(1);

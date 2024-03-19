@@ -1,11 +1,26 @@
 package com.example.rabbitmqprac.model;
 
-import lombok.Data;
+import jakarta.persistence.*;
+import lombok.*;
 
-@Data
+
+@Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Order {
-    private String id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column
     private String customerId;
+
+    @Column
     private String product;
+
+    @Column
     private double amount;
 }

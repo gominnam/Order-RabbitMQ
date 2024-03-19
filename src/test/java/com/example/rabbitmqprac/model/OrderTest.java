@@ -9,7 +9,7 @@ public class OrderTest {
     @Test
     public void createOrder() {
         Order order = new Order();
-        order.setId("1");
+        order.setId(1L);
         order.setCustomerId("customer-1");
         order.setProduct("project-1");
         order.setAmount(100.0);

@@ -2,6 +2,7 @@ package com.example.rabbitmqprac.service;
 
 import com.example.rabbitmqprac.config.RabbitMQConfig;
 import com.example.rabbitmqprac.model.Order;
+import com.example.rabbitmqprac.service.impl.OrderServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
