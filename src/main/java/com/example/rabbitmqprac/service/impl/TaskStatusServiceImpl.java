@@ -21,9 +21,9 @@ public class TaskStatusServiceImpl implements TaskStatusService {
         return taskStatusRepository.save(taskStatus);
     }
 
-    public void updateTaskStatus(Long taskId, OrderTaskStatus status) {
+    public TaskStatus updateTaskStatus(Long taskId, OrderTaskStatus status) {
         TaskStatus taskStatus = taskStatusRepository.findById(taskId).orElseThrow(() -> new IllegalArgumentException("Task not found"));
         taskStatus.setStatus(status);
-        taskStatusRepository.save(taskStatus);
+        return taskStatusRepository.save(taskStatus);
     }
 }

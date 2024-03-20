@@ -38,7 +38,7 @@ public class OrderProcessingService {
         // 3. 주문 처리 관련 정보를 RabbitMQ를 통해 전송
         messageQueueService.sendMessage(order);
 
-        // 4. 주문 처리 상태를 'PROCESSING'으로 업데이트
-        taskStatusService.updateTaskStatus(savedTaskStatus.getId(), OrderTaskStatus.PROCESSING);
+        // 4. 주문 처리 상태를 'PROCESSING'으로 업데이트 todo: 이로직은 customer 쪽에서 메세지를 받은경우 업데이트 하는 것으로 수정
+//        taskStatusService.updateTaskStatus(savedTaskStatus.getId(), OrderTaskStatus.PROCESSING);
     }
 }

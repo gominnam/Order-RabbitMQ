@@ -7,5 +7,5 @@ public interface TaskStatusService {
 
     TaskStatus saveTaskStatus(TaskStatus taskStatus);
 
-    void updateTaskStatus(Long taskId, OrderTaskStatus status);
+    TaskStatus updateTaskStatus(Long taskId, OrderTaskStatus status);
 }
