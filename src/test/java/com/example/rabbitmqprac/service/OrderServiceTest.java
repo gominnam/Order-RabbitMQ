@@ -3,15 +3,16 @@ package com.example.rabbitmqprac.service;
 import com.example.rabbitmqprac.config.RabbitMQConfig;
 import com.example.rabbitmqprac.model.Order;
 import com.example.rabbitmqprac.service.impl.OrderServiceImpl;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 
 import static org.mockito.Mockito.verify;
 
+@ExtendWith(MockitoExtension.class)
 public class OrderServiceTest {
 
     @InjectMocks //테스트 대상 클래스에 대한 인스턴스를 생성하고 해당 클래스가 의존하는 필드를 자동으로 주입
@@ -19,12 +20,6 @@ public class OrderServiceTest {
 
     @Mock
     private RabbitTemplate rabbitTemplate;
-
-
-    @BeforeEach //각 테스트 메서드가 실행되기 전에 먼저 실행되어야 하는 메서드를 지정하는데 사용
-    public void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
 
     @Test
     void createOrderShouldReturnSavedOrder() {

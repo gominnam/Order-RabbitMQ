@@ -21,9 +21,8 @@ public class TaskStatus {
     @JoinColumn(name = "orderId")
     private Order order;
 
-    @Enumerated(EnumType.STRING) // Enum 값을 문자열로 저장
-    private OrderTaskStatus status; // TaskStatus enum 사용
-
+    @Column(nullable = false)
+    private String status;
 
     @Column(nullable = false)
     private LocalDateTime createdAt;

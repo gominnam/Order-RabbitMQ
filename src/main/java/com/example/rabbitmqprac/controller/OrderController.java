@@ -2,7 +2,6 @@ package com.example.rabbitmqprac.controller;
 
 import com.example.rabbitmqprac.model.Order;
 import com.example.rabbitmqprac.service.OrderProcessingService;
-import com.example.rabbitmqprac.service.OrderService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

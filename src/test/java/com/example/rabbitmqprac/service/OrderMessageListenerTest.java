@@ -2,26 +2,22 @@ package com.example.rabbitmqprac.service;
 
 import com.example.rabbitmqprac.model.Order;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.autoconfigure.json.JsonTest;
 
 import static org.mockito.Mockito.*;
 
 @JsonTest //JSON 직렬화와 역직렬화에 대한 테스트를 지원
+@ExtendWith(MockitoExtension.class)
 public class OrderMessageListenerTest {
 
     @InjectMocks
     private OrderMessageListener orderMessageListener;
 
     private ObjectMapper objectMapper = new ObjectMapper();
-
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
 
     @Test
     public void sendMessageToQueue() throws Exception {

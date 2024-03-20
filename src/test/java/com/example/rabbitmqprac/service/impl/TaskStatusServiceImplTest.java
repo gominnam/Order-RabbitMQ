@@ -3,17 +3,18 @@ package com.example.rabbitmqprac.service.impl;
 import com.example.rabbitmqprac.enums.OrderTaskStatus;
 import com.example.rabbitmqprac.model.TaskStatus;
 import com.example.rabbitmqprac.repository.TaskStatusRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 public class TaskStatusServiceImplTest {
 
     @Mock
@@ -22,15 +23,10 @@ public class TaskStatusServiceImplTest {
     @InjectMocks
     private TaskStatusServiceImpl taskStatusService;
 
-    @BeforeEach
-    public void setUp() {
-        MockitoAnnotations.initMocks(this);
-    }
-
     private TaskStatus createTaskStatus(Long id, OrderTaskStatus status) {
         return TaskStatus.builder()
                 .id(id)
-                .status(status)
+                .status(status.name())
                 .updatedAt(LocalDateTime.now())
                 .build();
     }
@@ -48,11 +44,11 @@ public class TaskStatusServiceImplTest {
         TaskStatus result = taskStatusService.saveTaskStatus(inputTaskStatus);
         assertThat(result).isNotNull();
         assertThat(result.getId()).isEqualTo(1L);
-        assertThat(result.getStatus()).isEqualTo(OrderTaskStatus.PENDING);
+        assertThat(result.getStatus()).isEqualTo(OrderTaskStatus.PENDING.toString());
     }
 
     @Test
-    public void whenUpdateTaskStatus_thenReturnTaskStatus() {
+    public void whenUpdateTaskStatus_thenReturnTaskStatus() {//todo: after edit updateTaskStatus editing this test
         // given
         TaskStatus inputTaskStatus = createTaskStatus(1L, OrderTaskStatus.PENDING);
         TaskStatus updatedTaskStatus = createTaskStatus(1L, OrderTaskStatus.PROCESSING);

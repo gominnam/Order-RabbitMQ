@@ -4,6 +4,7 @@ import com.example.rabbitmqprac.enums.OrderTaskStatus;
 import com.example.rabbitmqprac.model.Order;
 import com.example.rabbitmqprac.model.TaskStatus;
 import com.example.rabbitmqprac.service.impl.MessageQueueService;
+import com.example.rabbitmqprac.states.PendingState;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,7 +31,7 @@ public class OrderProcessingService {
 
         // 2. 주문 처리 상태를 'PENDING'으로 설정하고 데이터베이스에 저장
         TaskStatus taskStatus = TaskStatus.builder().order(order)
-                .status(OrderTaskStatus.PENDING)
+                .status(PendingState.getInstance().toString())
                 .build();
 
         TaskStatus savedTaskStatus = taskStatusService.saveTaskStatus(taskStatus);
