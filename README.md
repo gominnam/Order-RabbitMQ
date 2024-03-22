@@ -71,6 +71,25 @@
 
 ```
 POST "/api/order"
+body
+{
+    "customerId": "minjun",
+    "shippingAddress": "서울시 개발동 스타벅스 123",
+    "totalQuantity": 2,
+    "totalPrice": 4000000,
+   "orderItems": [
+        {
+            "productId": "mackbook-pro-2024",
+            "quantity": 1,
+            "unitPrice": 3000000
+        },
+        {
+            "productId": "iphone-14-pro",
+            "quantity": 1,
+            "unitPrice": 1000000
+        }
+    ]
+}
 ```
 <img src="src/main/resources/static/images/post_api_order.png" width="400">
 
