@@ -1,6 +1,5 @@
 package com.example.rabbitmqprac.model;
 
-import com.example.rabbitmqprac.enums.OrderTaskStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -17,8 +16,8 @@ public class TaskStatus {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "orderId")
+    @OneToOne
+    @JoinColumn(name = "order_id", referencedColumnName = "id")
     private Order order;
 
     @Column(nullable = false)

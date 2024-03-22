@@ -25,9 +25,9 @@ public class OrderProcessingService {
     }
 
     @Transactional
-    public void processOrder(Order order) throws JsonProcessingException {
+    public Order processOrder(Order order) throws JsonProcessingException {
         // 1. 주문 정보를 데이터베이스에 저장
-        orderService.createOrder(order);
+        Order savedIOrder = orderService.createOrder(order);
 
         // 2. 주문 처리 상태를 'PENDING'으로 설정하고 데이터베이스에 저장
         TaskStatus taskStatus = TaskStatus.builder().order(order)
@@ -41,5 +41,7 @@ public class OrderProcessingService {
 
         // 4. 주문 처리 상태를 'PROCESSING'으로 업데이트 todo: 이로직은 customer 쪽에서 메세지를 받은경우 업데이트 하는 것으로 수정
 //        taskStatusService.updateTaskStatus(savedTaskStatus.getId(), OrderTaskStatus.PROCESSING);
+
+        return savedIOrder;
     }
 }

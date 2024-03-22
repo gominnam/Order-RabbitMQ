@@ -1,6 +1,7 @@
 package com.example.rabbitmqprac.controller;
 
 import com.example.rabbitmqprac.model.Order;
+import com.example.rabbitmqprac.service.OrderProcessingService;
 import com.example.rabbitmqprac.service.OrderService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -24,7 +25,7 @@ public class OrderControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private OrderService orderService;
+    private OrderProcessingService orderProcessingService;
 
     @Autowired
     private ObjectMapper objectMapper;

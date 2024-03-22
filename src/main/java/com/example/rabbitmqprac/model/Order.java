@@ -3,6 +3,8 @@ package com.example.rabbitmqprac.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -10,17 +12,34 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Table(name = "orders")
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long Id;
 
-    @Column
+    @Column(nullable = false)
     private String customerId;
 
-    @Column
-    private String product;
+    @Column(nullable = false)
+    private LocalDateTime orderDate;
 
-    @Column
+    @Column(nullable = false, length = 500)
+    private String shippingAddress;
+
+    @Column(nullable = false)
     private double amount;
+
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Column(nullable = false)
+    private List<OrderItem> orderItems;
+
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    @PrimaryKeyJoinColumn
+    private TaskStatus taskStatus;
+
+    @PrePersist
+    protected void onCreate() {
+        orderDate = LocalDateTime.now();
+    }
 }

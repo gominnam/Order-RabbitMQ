@@ -3,6 +3,7 @@ package com.example.rabbitmqprac.service.impl;
 import com.example.rabbitmqprac.model.Order;
 import com.example.rabbitmqprac.repository.OrderRepository;
 import com.example.rabbitmqprac.service.OrderService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,12 +20,10 @@ public class OrderServiceImpl implements OrderService {
 
     public Order createOrder(Order order) {
         try {
-            Order savedOrder = orderRepository.save(order);
-            System.out.println("Order saved: " + savedOrder);
+           return orderRepository.save(order);
         } catch (Exception e) {
             e.printStackTrace();
+            throw new RuntimeException("Order creation failed", e);
         }
-
-        return order;
     }
 }
