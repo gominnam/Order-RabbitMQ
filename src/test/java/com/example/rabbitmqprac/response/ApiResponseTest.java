@@ -3,6 +3,7 @@ package com.example.rabbitmqprac.response;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class ApiResponseTest {
 
@@ -27,7 +28,7 @@ public class ApiResponseTest {
         ApiResponse<String> response = ApiResponse.fail("Only Message");
         assertEquals(500, response.getStatus());
         assertEquals("Only Message", response.getMessage());
-        assertEquals(null, response.getData());
+        assertNull(response.getData());
     }
 
     @Test
@@ -35,6 +36,6 @@ public class ApiResponseTest {
         ApiResponse<String> response = ApiResponse.fail(400, "Bad Request");
         assertEquals(400, response.getStatus());
         assertEquals("Bad Request", response.getMessage());
-        assertEquals(null, response.getData());
+        assertNull(response.getData());
     }
 }

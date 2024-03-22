@@ -2,21 +2,28 @@ package com.example.rabbitmqprac.model;
 
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
+import java.util.Collections;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class OrderTest {
 
     @Test
     public void createOrder() {
-        Order order = new Order();
-        order.setId(1L);
-        order.setCustomerId("customer-1");
-        order.setProduct("project-1");
-        order.setAmount(100.0);
+        Order order = Order.builder()
+                .id(1L)
+                .customerId("minjun")
+                .orderDate(LocalDateTime.parse("2024-03-21T14:30:00"))
+                .shippingAddress("서울시 강남구 테헤란로 1234")
+                .totalQuantity(3)
+                .totalPrice(5000000)
+                .orderItems(Collections.emptyList())
+                .build();
 
-        assertEquals("1", order.getId(), "주문번호가 일치하지 않습니다.");
-        assertEquals("customer-1", order.getCustomerId(), "고객번호가 일치하지 않습니다.");
-        assertEquals("project-1", order.getProduct(), "상품명이 일치하지 않습니다.");
-        assertEquals(100.0, order.getAmount(), 0.0, "금액이 일치하지 않습니다.");
+        assertEquals(1L, order.getId(), "주문번호가 일치하지 않습니다.");
+        assertEquals("minjun", order.getCustomerId(), "고객ID가 일치하지 않습니다.");
+        assertEquals(3, order.getTotalQuantity(), 0, "수량이 일치하지 않습니다.");
+        assertEquals(5000000, order.getTotalPrice(), 0, "금액이 일치하지 않습니다.");
     }
 }

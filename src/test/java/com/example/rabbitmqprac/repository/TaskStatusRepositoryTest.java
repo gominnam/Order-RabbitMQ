@@ -34,7 +34,8 @@ public class TaskStatusRepositoryTest {
                 .customerId("minjun")
                 .orderDate(LocalDateTime.parse("2024-03-21T14:30:00"))
                 .shippingAddress("서울시 강남구 테헤란로 1234")
-                .amount(8800)
+                .totalQuantity(3)
+                .totalPrice(5000000)
                 .orderItems(Collections.emptyList())
                 .build();
         entityManager.persist(order);

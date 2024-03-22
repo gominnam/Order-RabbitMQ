@@ -3,6 +3,7 @@ package com.example.rabbitmqprac.service.impl;
 import com.example.rabbitmqprac.enums.OrderTaskStatus;
 import com.example.rabbitmqprac.model.TaskStatus;
 import com.example.rabbitmqprac.repository.TaskStatusRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -10,8 +11,13 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -23,10 +29,14 @@ public class TaskStatusServiceImplTest {
     @InjectMocks
     private TaskStatusServiceImpl taskStatusService;
 
-    private TaskStatus createTaskStatus(Long id, OrderTaskStatus status) {
-        return TaskStatus.builder()
-                .id(id)
-                .status(status.name())
+    private TaskStatus taskStatus;
+
+    @BeforeEach
+    void setUp() {
+        taskStatus = TaskStatus.builder()
+                .id(1L)
+                .status(OrderTaskStatus.PENDING.toString())
+                .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
                 .build();
     }
@@ -34,8 +44,8 @@ public class TaskStatusServiceImplTest {
     @Test
     public void whenCreateTaskStatus_thenReturnTaskStatus() {
         // given
-        TaskStatus inputTaskStatus = createTaskStatus(1L, OrderTaskStatus.PENDING);
-        TaskStatus savedTaskStatus = createTaskStatus(1L, OrderTaskStatus.PENDING);
+        TaskStatus inputTaskStatus = taskStatus;
+        TaskStatus savedTaskStatus = taskStatus;
 
         // when
         when(taskStatusRepository.save(inputTaskStatus)).thenReturn(savedTaskStatus);
@@ -50,30 +60,26 @@ public class TaskStatusServiceImplTest {
     @Test
     public void whenUpdateTaskStatus_thenReturnTaskStatus() {//todo: after edit updateTaskStatus editing this test
         // given
-        TaskStatus inputTaskStatus = createTaskStatus(1L, OrderTaskStatus.PENDING);
-        TaskStatus updatedTaskStatus = createTaskStatus(1L, OrderTaskStatus.PROCESSING);
+        Long taskId = 1L;
+        String newStatus = OrderTaskStatus.PROCESSING.toString();
+        when(taskStatusRepository.findById(taskId)).thenReturn(Optional.of(taskStatus)); // Optional.of() 메소드는 주어진 non-null 값을 갖는 Optional 객체를 반환
+        when(taskStatusRepository.save(any(TaskStatus.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));// getArgument() 메소드는 목 객체에 전달된 인수를 반환, 숫자 0은 첫번째 인자를 가리킨다.
 
         // when
-        when(taskStatusRepository.findById(1L)).thenReturn(java.util.Optional.of(inputTaskStatus)); // Optional.of() 메소드는 주어진 non-null 값을 갖는 Optional 객체를 반환
-        when(taskStatusRepository.save(inputTaskStatus)).thenReturn(updatedTaskStatus);
+        TaskStatus updatedTaskStatus = taskStatusService.updateTaskStatus(taskId, newStatus);
 
         // then
-        TaskStatus result = taskStatusService.updateTaskStatus(1L, OrderTaskStatus.PROCESSING);
+        assertEquals(OrderTaskStatus.PROCESSING.toString(), updatedTaskStatus.getStatus());
+        verify(taskStatusRepository).save(any(TaskStatus.class));
     }
 
     @Test
     public void whenUpdateTaskStatus_thenThrowIllegalArgumentException() {
-        // given
-        TaskStatus taskStatus = createTaskStatus(1L, OrderTaskStatus.PROCESSING);
+        when(taskStatusRepository.findById(1L)).thenReturn(Optional.empty());
 
-        // when
-        when(taskStatusRepository.findById(1L)).thenReturn(java.util.Optional.empty()); // Optional.empty() 메소드는 비어있는 Optional 객체를 반환
-
-        // then
-        try {
-            TaskStatus updatedTaskStatus = taskStatusService.updateTaskStatus(1L, OrderTaskStatus.PROCESSING);
-        } catch (IllegalArgumentException e) {
-            assertThat(e.getMessage()).isEqualTo("Task not found");
-        }
+        assertThrows(IllegalArgumentException.class, () -> {
+            taskStatusService.updateTaskStatus(1L, "PROCESSING");
+        }, "TaskStatus not found");
     }
 }

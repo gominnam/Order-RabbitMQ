@@ -1,8 +1,7 @@
 package com.example.rabbitmqprac.service;
 
+import com.example.rabbitmqprac.config.RabbitMQConfig;
 import com.example.rabbitmqprac.model.Order;
-import com.example.rabbitmqprac.states.CompletedState;
-import com.example.rabbitmqprac.states.ProcessingState;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,22 +10,25 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+
 
 import java.time.LocalDateTime;
 
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class OrderMessageListenerTest {
+public class MessageQueueServiceTest {
 
     @Mock
-    private TaskStatusService taskStatusService;
+    private RabbitTemplate rabbitTemplate;
 
     @Mock
     private ObjectMapper objectMapper;
 
     @InjectMocks
-    private OrderMessageListener orderMessageListener;
+    private MessageQueueService messageQueueService;
 
     private Order order;
 
@@ -34,8 +36,8 @@ public class OrderMessageListenerTest {
 
     @BeforeEach
     void setUp() {
+        // 주문 객체를 초기화하는 코드
         order = Order.builder()
-                .id(1L)
                 .customerId("minjun")
                 .orderDate(LocalDateTime.parse("2024-03-21T14:30:00"))
                 .shippingAddress("서울시 강남구 테헤란로 1234")
@@ -45,16 +47,18 @@ public class OrderMessageListenerTest {
     }
 
     @Test
-    public void receiveOrderMessage() throws JsonProcessingException {
+    public void sendMessageToQueue() throws JsonProcessingException {
         // given
-        when(objectMapper.readValue(eq(orderMessageJson), eq(Order.class))).thenReturn(order);
+        when(objectMapper.writeValueAsString(eq(order))).thenReturn(orderMessageJson);
 
         // when
-        orderMessageListener.receiveOrderMessage(orderMessageJson);
+        messageQueueService.sendMessage(order);
 
         // then
-        verify(objectMapper).readValue(eq(orderMessageJson), eq(Order.class));
-        verify(taskStatusService).updateTaskStatus(anyLong(), eq(ProcessingState.getInstance().toString()));
-        verify(taskStatusService).updateTaskStatus(anyLong(), eq(CompletedState.getInstance().toString()));
+        verify(rabbitTemplate).convertAndSend(
+                eq(RabbitMQConfig.EXCHANGE_NAME),
+                eq(RabbitMQConfig.ROUTING_KEY),
+                eq(orderMessageJson)
+        );
     }
 }

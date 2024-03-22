@@ -16,7 +16,7 @@ import java.util.List;
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    private Long id;
 
     @Column(nullable = false)
     private String customerId;
@@ -28,7 +28,10 @@ public class Order {
     private String shippingAddress;
 
     @Column(nullable = false)
-    private double amount;
+    private double totalQuantity;
+
+    @Column(nullable = false)
+    private double totalPrice;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     @Column(nullable = false)

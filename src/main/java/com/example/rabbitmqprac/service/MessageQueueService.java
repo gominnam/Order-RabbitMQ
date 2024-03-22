@@ -1,4 +1,4 @@
-package com.example.rabbitmqprac.service.impl;
+package com.example.rabbitmqprac.service;
 
 import com.example.rabbitmqprac.config.RabbitMQConfig;
 import com.example.rabbitmqprac.model.Order;

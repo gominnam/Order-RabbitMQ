@@ -1,40 +1,116 @@
 # Getting Started
 
 
-### Project Purpose
+### 1. 프로젝트 요약
 
-* RabbitMQ를 활용한 메시지 큐 구현
-* TDD 방식으로 개발 연습
-* 하나의 프로젝트에서 dockerize를 통한 RabbitMQ 서버와 Spring Boot 서버를 연동하여 테스트
-* Database에 ORDER와 TASKSTATUS 테이블 정보를 저장
+* RabbitMQ를 활용하여 producer-consumer 구현
+* TDD 방식으로 개발
+* 하나의 프로젝트에서 dockerize를 통한 `RabbitMQ, Spring Boot, postgreSQL 서버`를 연동하여 테스트
+* Database에 `ORDER, ORDERITEM, TASKSTATUS` 테이블 정보 저장
 * Refactoring 및 Clean Code 작성
+* Design Patterns `Builder, Singleton, State, Facade, DI`
+<br>
 
-
-### 개발 테스트 환경
+### 2. 개발 테스트 환경
 
 * Java 17
 * Spring Boot 3.2.3
 * RabbitMQ
 * Docker
 * PostgreSQL
+<br>
+
+### 3. Tables
+
+- Order
+
+  | Column          | Type           | Description |
+  |-----------------|----------------|-------------|
+  | id              | Long           | PK          |
+  | customerId      | String         | 고객 ID       |
+  | orderDate       | LocalDateTime  | 주문 날짜       |
+  | shippingAddress | String         | 배송 주소       |
+  | totalQuantity   | double         | 총 수량        |
+  | totalPrice      | double         | 총 가격        |
+  | orderItems      | List<OrderItem>| 주문 항목       |
+  | taskStatus      | TaskStatus     | 작업 상태       |
 
 
-### Guides
+- OrderItem
 
-#### How to run the application
+  | Column          | Type           | Description |
+  |-----------------|----------------|-------------|
+  | id              | Long           | PK          |
+  | productId       | String         | 상품 ID       |
+  | quantity        | double         | 수량         |
+  | price           | double         | 가격         |
+  | order           | Order          | 주문         |
+ 
+
+- TaskStatus
+
+  | Column    | Type           | Description |
+  |-----------|----------------|-------------|
+  | id        | Long           | PK          |
+  | status    | String         | 상태          |
+  | order     | Order          | 주문          |
+  | createdAt | LocalDateTime          | 생성일시        |
+  | updatedAt     | LocalDateTime          | 수정일시        |
+<br>
+
+### 3. Guides
+
+#### - How to run the application
 ```angular2html
-./gradlew clean build
-
-docker-compose up --build
+1] ./gradlew clean build  //sleep을 사용하여 db 데이터 확인할때 -x test 추가(test코드 또한 sleep 발생)
+2] docker-compose up --build
 ```
+<br>
 
-
-#### API Endpoints
+#### - API Endpoints
 
 ```
 POST "/api/order"
-
 ```
+<img src="src/main/resources/static/images/post_api_order.png" width="400">
+
+<br><br>
+
+#### - How to confirm database data 
+
+#### 1. docker postgresql 접속 방법
+```angular2html
+//how to confirm database data
+1] docker-compose exec [서비스 이름] bash
+2] psql -U [사용자 이름] -d [데이터베이스 이름]
+
+이후 postgreSQL Query문을 통해 데이터 확인
+```
+
+#### 2. Order Table 조회 및 결과
+```angular2html
+SELECT * FROM ORDERS;
+```
+<img src="src/main/resources/static/images/select_orders.png" width="800">
+
+#### 3. OrderItem Table 조회 및 결과
+```angular2html
+SELECT * FROM ORDER_ITEM;
+```
+<img src="src/main/resources/static/images/select_orderitem.png" width="800">
+
+#### 4. TaskStatus Table 조회 및 결과
+```angular2html
+// TASK_STATUS는 PENDDING > PROCESSING > COMPLETED
+//               PENDDING > PROCESSING > FAILED
+SELECT * FROM TASK_STATUS;
+```
+- PENDING
+<img src="src/main/resources/static/images/select_taskstatus_pending.png" width="800">
+- PROCESSING
+<img src="src/main/resources/static/images/select_taskstatus_processing.png" width="800">
+- COMPLETED
+<img src="src/main/resources/static/images/select_taskstatus_completed.png" width="800">
 
 
 ### Reference Links

@@ -1,11 +1,12 @@
 package com.example.rabbitmqprac.service.impl;
 
-import com.example.rabbitmqprac.enums.OrderTaskStatus;
 import com.example.rabbitmqprac.model.TaskStatus;
 import com.example.rabbitmqprac.repository.TaskStatusRepository;
 import com.example.rabbitmqprac.service.TaskStatusService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class TaskStatusServiceImpl implements TaskStatusService {
@@ -22,13 +23,17 @@ public class TaskStatusServiceImpl implements TaskStatusService {
     }
 
     @Override
-    public TaskStatus updateTaskStatus(Long taskId, OrderTaskStatus status) {//todo: edit this method to update task status
-        return null;
-    }
-
-    public TaskStatus updateTaskStatus(Long taskId) { //todo: edit this method to update task status
-        TaskStatus taskStatus = taskStatusRepository.findById(taskId).orElseThrow(() -> new IllegalArgumentException("Task not found"));
-        taskStatus.setStatus(OrderTaskStatus.PROCESSING.toString());
-        return taskStatusRepository.save(taskStatus);
+    @Transactional(propagation = Propagation.REQUIRES_NEW) // 데이터를 저장하는 작업을 별도의 트랜잭션으로 분리하여 즉시 커밋
+    public TaskStatus updateTaskStatus(Long taskId, String status) {
+        try {
+            TaskStatus taskStatus = taskStatusRepository.findById(taskId)
+                    .orElseThrow(() -> new IllegalArgumentException("TaskStatus not found"));
+            taskStatus.setStatus(status);
+            System.out.println("before updateTaskStatus save status: " + status);
+            return taskStatusRepository.save(taskStatus);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e; // 예외를 다시 던져 상위로 전파
+        }
     }
 }
