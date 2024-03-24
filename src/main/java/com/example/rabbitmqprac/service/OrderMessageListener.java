@@ -23,7 +23,6 @@ public class OrderMessageListener {
         this.objectMapper = objectMapper;
     }
 
-    @Transactional(timeout=200)
     @RabbitListener(queues = RabbitMQConfig.QUEUE_NAME, concurrency = "10-15")
     public void receiveOrderMessage(final String message) throws Exception {
         Order receivedOrder = objectMapper.readValue(message, Order.class);

@@ -31,10 +31,8 @@ public class AsyncService {
         updateTaskStatusWithNewTransaction(order);
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void updateTaskStatusWithNewTransaction(Order order) {
         boolean randomBoolean = getRandomBoolean();
-        System.out.println("Random boolean: " + randomBoolean);
         if (!randomBoolean) {
             taskStatusService.updateTaskStatus(order.getId(), FailedState.getInstance().toString());
         } else {
