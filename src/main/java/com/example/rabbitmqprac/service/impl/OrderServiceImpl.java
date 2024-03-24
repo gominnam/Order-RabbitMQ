@@ -19,11 +19,6 @@ public class OrderServiceImpl implements OrderService {
     }
 
     public Order createOrder(Order order) {
-        try {
-           return orderRepository.save(order);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("Order creation failed", e);
-        }
+        return orderRepository.save(order);
     }
 }

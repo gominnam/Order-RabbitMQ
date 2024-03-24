@@ -11,7 +11,7 @@
 * Design Patterns `Builder, Singleton, State, Facade, DI`
 <br>
 
-### 2. 개발 테스트 환경
+### 2. 개발 환경
 
 * Java 17
 * Spring Boot 3.2.3
@@ -62,7 +62,7 @@
 
 #### - How to run the application
 ```angular2html
-1] ./gradlew clean build  //sleep을 사용하여 db 데이터 확인할때 -x test 추가(test코드 또한 sleep 발생)
+1] ./gradlew clean build // sleep을 사용하여 db 데이터 확인할때 -x test 추가(test코드 또한 sleep 발생)
 2] docker-compose up --build
 ```
 <br>
@@ -77,20 +77,21 @@ body
     "shippingAddress": "서울시 개발동 스타벅스 123",
     "totalQuantity": 2,
     "totalPrice": 4000000,
-   "orderItems": [
-        {
-            "productId": "mackbook-pro-2024",
-            "quantity": 1,
-            "unitPrice": 3000000
-        },
-        {
-            "productId": "iphone-14-pro",
-            "quantity": 1,
-            "unitPrice": 1000000
-        }
+    "orderItems": [
+          {
+              "productId": "mackbook-pro-2024",
+              "quantity": 1,
+              "unitPrice": 3000000
+          },
+          {
+              "productId": "iphone-14-pro",
+              "quantity": 1,
+              "unitPrice": 1000000
+          }
     ]
 }
 ```
+- postman UI (request and response)
 <img src="src/main/resources/static/images/post_api_order.png" width="400">
 
 <br><br>
@@ -99,7 +100,6 @@ body
 
 #### 1. docker postgresql 접속 방법
 ```angular2html
-//how to confirm database data
 1] docker-compose exec [서비스 이름] bash
 2] psql -U [사용자 이름] -d [데이터베이스 이름]
 
