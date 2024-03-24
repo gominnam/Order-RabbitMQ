@@ -4,9 +4,9 @@
 ### 1. 프로젝트 요약
 
 * RabbitMQ를 활용하여 producer-consumer 구현
+* Async 방식으로 주문 생성 및 주문 상태 변경
 * TDD 방식으로 개발
 * 하나의 프로젝트에서 dockerize를 통한 `RabbitMQ, Spring Boot, postgreSQL 서버`를 연동하여 테스트
-* Database에 `ORDER, ORDERITEM, TASKSTATUS` 테이블 정보 저장
 * Refactoring 및 Clean Code 작성
 * Design Patterns `Builder, Singleton, State, Facade, DI`
 <br>
@@ -120,16 +120,16 @@ SELECT * FROM ORDER_ITEM;
 
 #### 4. TaskStatus Table 조회 및 결과
 ```angular2html
-// TASK_STATUS는 PENDDING > PROCESSING > COMPLETED
-//               PENDDING > PROCESSING > FAILED
+성공한 TASK_STATUS: PENDDING > PROCESSING > COMPLETED
+실패한 TASK_STATUS: PENDDING > PROCESSING > FAILED
 SELECT * FROM TASK_STATUS;
 ```
 - PENDING
 <img src="src/main/resources/static/images/select_taskstatus_pending.png" width="800">
 - PROCESSING
 <img src="src/main/resources/static/images/select_taskstatus_processing.png" width="800">
-- COMPLETED
-<img src="src/main/resources/static/images/select_taskstatus_completed.png" width="800">
+- COMPLETED and FAILED (성공과 실패는 70:30 비율로 나타나게 Random하게 생성)
+<img src="src/main/resources/static/images/select_taskstatus_completed_failed.png" width="800">
 
 
 ### Reference Links

@@ -1,10 +1,7 @@
 package com.example.rabbitmqprac.service;
 
 import com.example.rabbitmqprac.model.Order;
-import com.example.rabbitmqprac.states.CompletedState;
-import com.example.rabbitmqprac.states.FailedState;
 import com.example.rabbitmqprac.states.ProcessingState;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,11 +9,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.util.ReflectionTestUtils;
 
-import java.lang.reflect.Method;
 import java.time.LocalDateTime;
-import java.util.Random;
 
 import static org.mockito.Mockito.*;
 
@@ -25,6 +19,9 @@ public class OrderMessageListenerTest {
 
     @Mock
     private TaskStatusService taskStatusService;
+
+    @Mock
+    private AsyncService asyncService;
 
     @Mock
     private ObjectMapper objectMapper;
@@ -49,38 +46,18 @@ public class OrderMessageListenerTest {
     }
 
     @Test
-    public void receiveOrderMessageWithSuccess() throws Exception {
+    public void receiveOrderMessageTest() throws Exception {
         // given
         when(objectMapper.readValue(eq(orderMessageJson), eq(Order.class))).thenReturn(order);
+        doNothing().when(asyncService).processOrderAsync(any(Order.class));
 
         // when
-        Random mockRandom = mock(Random.class);
-        when(mockRandom.nextFloat()).thenReturn(0.7f); // 0.7보다 작거나 같아서 성공 시나리오
-        ReflectionTestUtils.setField(orderMessageListener, "random", mockRandom);
-
         orderMessageListener.receiveOrderMessage(orderMessageJson);
 
         // then
         verify(objectMapper).readValue(eq(orderMessageJson), eq(Order.class));
         verify(taskStatusService).updateTaskStatus(anyLong(), eq(ProcessingState.getInstance().toString()));
-        verify(taskStatusService).updateTaskStatus(anyLong(), eq(CompletedState.getInstance().toString()));
-    }
-
-    @Test
-    public void receiveOrderMessageWithFailed() throws Exception {
-        // given
-        when(objectMapper.readValue(eq(orderMessageJson), eq(Order.class))).thenReturn(order);
-
-        // when
-        Random mockRandom = mock(Random.class);
-        when(mockRandom.nextFloat()).thenReturn(0.8f); // 0.7보다 크기 때문에 실패 시나리오
-        ReflectionTestUtils.setField(orderMessageListener, "random", mockRandom);
-
-        orderMessageListener.receiveOrderMessage(orderMessageJson);
-
-        // then
-        verify(objectMapper).readValue(eq(orderMessageJson), eq(Order.class));
-        verify(taskStatusService).updateTaskStatus(anyLong(), eq(ProcessingState.getInstance().toString()));
-        verify(taskStatusService).updateTaskStatus(anyLong(), eq(FailedState.getInstance().toString()));
+        verify(taskStatusService, times(1)).updateTaskStatus(eq(order.getId()), anyString());
+        verify(asyncService, times(1)).processOrderAsync(any(Order.class));
     }
 }

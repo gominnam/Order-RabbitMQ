@@ -24,7 +24,7 @@ public class TaskStatusServiceImpl implements TaskStatusService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW) // 데이터를 저장하는 작업을 별도의 트랜잭션으로 분리하여 즉시 커밋
-    public TaskStatus updateTaskStatus(Long taskId, String status) {
+    public TaskStatus updateTaskStatus(Long taskId, String status) throws RuntimeException {
         TaskStatus taskStatus = taskStatusRepository.findById(taskId)
                 .orElseThrow(() -> new IllegalArgumentException("TaskStatus not found"));
         taskStatus.setStatus(status);
