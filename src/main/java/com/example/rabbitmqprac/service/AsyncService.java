@@ -27,7 +27,7 @@ public class AsyncService {
 
     @Async
     public void processOrderAsync(Order order) throws InterruptedException {
-//        Thread.sleep(60000); // 비동기 처리 예시 (1분 대기)
+        Thread.sleep(60000); // 비동기 처리 예시 (1분 대기)
         updateTaskStatusWithNewTransaction(order);
     }
 

@@ -8,7 +8,7 @@
 * TDD 방식으로 개발
 * 하나의 프로젝트에서 dockerize를 통한 `RabbitMQ, Spring Boot, postgreSQL 서버`를 연동하여 테스트
 * Refactoring 및 Clean Code 작성
-* Design Patterns `Builder, Singleton, State, Facade, DI`
+* Design Patterns `Builder, Singleton, State, Facade, DI, Proxy`
 <br>
 
 ### 2. 개발 환경
